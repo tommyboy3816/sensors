@@ -66,6 +66,7 @@ VPATH = \
 # list of all include directories needed by this project
 INCLUDES  = \
 	-I. \
+	-I/home/luke/code/wiringPi/wiringPi \
 	-I$(QPCPP)/include
 
 
@@ -81,8 +82,10 @@ C_SRCS := \
 CPP_SRCS :=	\
 	dht11.cpp
 
-LIB_DIRS  :=
-LIBS      :=
+LIB_DIRS  := -L/home/luke/code/wiringPi/wiringPi
+LIBS      := -lwiringPi
+LIBS      += -lcrypt
+#LIBS      += -lshm_open
 
 # defines...
 # QP_API_VERSION controls the QP API compatibility; 9999 means the latest API
@@ -155,7 +158,7 @@ LINKFLAGS := -Wl,-Map,$(BIN_DIR)/$(PROJECT).map,--cref,--gc-sections
 # combine all the soruces...
 INCLUDES  += -I$(QP_PORT_DIR)
 LIB_DIRS  += -L$(QP_PORT_DIR)/$(BIN_DIR)
-LIBS      += -lpthread -lqp
+LIBS      += -lpthread -lqp -lrt
 
 C_OBJS       := $(patsubst %.c,   %.o, $(C_SRCS))
 CPP_OBJS     := $(patsubst %.cpp, %.o, $(CPP_SRCS))
