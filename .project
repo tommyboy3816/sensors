@@ -3,6 +3,8 @@
 	<name>dht11</name>
 	<comment></comment>
 	<projects>
+		<project>qpcpp</project>
+		<project>wiringPi</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -4,15 +4,19 @@
  *	DHT11 test
  */
  
-#include <wiringPi.h>
- 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+
+#include "wiringPi.h"
+#include "qpcpp.h"
+#include "Sensor.h"
+
 #define MAXTIMINGS	85
 #define DHTPIN		7
 int dht11_dat[5] = { 0, 0, 0, 0, 0 };
- 
+
+
 void read_dht11_dat()
 {
 	uint8_t laststate	= HIGH;
@@ -78,16 +82,31 @@ void read_dht11_dat()
  
 int main( void )
 {
-	printf( "Raspberry Pi wiringPi DHT11 Temperature test program\n" );
- 
-	if ( wiringPiSetup() == -1 )
-		exit( 1 );
- 
-	while ( 1 )
-	{
-		read_dht11_dat();
-		delay( 1000 ); /* wait 1sec to refresh */
-	}
- 
-	return(0);
+   printf( "Raspberry Pi wiringPi DHT11 Temperature test program\n" );
+
+   if ( wiringPiSetup() == -1 ) {
+      exit( 1 );
+   }
+
+   while ( 1 )
+   {
+      read_dht11_dat();
+      delay( 1000 ); /* wait 1sec to refresh */
+   }
+
+   static QEvt const *sensorQSto[10]; // Event queue storage for Blinky
+
+   //BSP_init(); // initialize the Board Support Package
+   QF::init(); // initialize the framework and the underlying RT kernel
+
+   // publish-subscribe not used, no call to QF::psInit()
+   // dynamic event allocation not used, no call to QF::poolInit()
+
+   // instantiate and start the active objects...
+   AO_Sensor->start(1U,                            // priority
+                    sensorQSto, Q_DIM(sensorQSto), // event queue
+                    (void *)0, 0U);                // stack (unused)
+
+   return QF::run(); // run the QF application
+   //return(0);
 }

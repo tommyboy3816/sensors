@@ -80,7 +80,8 @@ C_SRCS := \
 
 # C++ source files...
 CPP_SRCS :=	\
-	dht11.cpp
+	dht11.cpp \
+	Sensor.cpp
 
 LIB_DIRS  := -L/home/luke/code/wiringPi/wiringPi
 LIBS      := -lwiringPi
